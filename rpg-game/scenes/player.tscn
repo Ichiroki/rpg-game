@@ -1,7 +1,9 @@
-[gd_scene load_steps=57 format=3 uid="uid://8e13m6ekji1h"]
+[gd_scene load_steps=59 format=3 uid="uid://8e13m6ekji1h"]
 
-[ext_resource type="Texture2D" uid="uid://dheylvnq04kps" path="res://art/characters/player.png" id="1_3vyb7"]
+[ext_resource type="Texture2D" uid="uid://dheylvnq04kps" path="res://assets/art/characters/player.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cijthl4n7fvot" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="AudioStream" uid="uid://xmwbsxietdor" path="res://assets/audio/slash_plant.mp3" id="4_dqkch"]
+[ext_resource type="PackedScene" uid="uid://c88oamn1k02c6" path="res://scenes/utils/ui/ui.tscn" id="4_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -444,6 +446,13 @@ wait_time = 0.5
 
 [node name="deal_attack_timer" type="Timer" parent="."]
 wait_time = 0.5
+
+[node name="hitsound" type="AudioStreamPlayer2D" parent="." groups=["player"]]
+stream = ExtResource("4_dqkch")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("4_qlg0r")]
 
 [connection signal="body_entered" from="player_hitbox" to="." method="_on_player_hitbox_body_entered"]
 [connection signal="body_exited" from="player_hitbox" to="." method="_on_player_hitbox_body_exited"]

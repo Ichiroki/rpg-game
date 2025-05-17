@@ -1,7 +1,8 @@
-[gd_scene load_steps=51 format=3 uid="uid://d3wyoxcsahhot"]
+[gd_scene load_steps=52 format=3 uid="uid://d3wyoxcsahhot"]
 
-[ext_resource type="Texture2D" uid="uid://3l2cw13rth12" path="res://art/characters/slime.png" id="1_371uh"]
+[ext_resource type="Texture2D" uid="uid://3l2cw13rth12" path="res://assets/art/characters/slime.png" id="1_371uh"]
 [ext_resource type="Script" uid="uid://crnt2u5bcon6g" path="res://scripts/slime.gd" id="1_p2gj0"]
+[ext_resource type="AudioStream" uid="uid://xmwbsxietdor" path="res://assets/audio/slash_plant.mp3" id="3_n6pvg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p2gj0"]
 atlas = ExtResource("1_371uh")
@@ -384,7 +385,7 @@ radius = 69.0072
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p2gj0"]
 
-[node name="Slime" type="CharacterBody2D"]
+[node name="Slime" type="CharacterBody2D" groups=["enemy", "plant"]]
 script = ExtResource("1_p2gj0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -409,11 +410,19 @@ shape = SubResource("CircleShape2D_kut4w")
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_p2gj0")
 
+[node name="hitbox_sound" type="AudioStreamPlayer2D" parent="slime_hitbox"]
+visible = false
+stream = ExtResource("3_n6pvg")
+
+[node name="dead_delay" type="Timer" parent="slime_hitbox"]
+
 [node name="take_damage_timer" type="Timer" parent="."]
 wait_time = 0.5
 
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
 [connection signal="body_entered" from="slime_hitbox" to="." method="_on_slime_hitbox_body_entered"]
 [connection signal="body_exited" from="slime_hitbox" to="." method="_on_slime_hitbox_body_exited"]
+[connection signal="timeout" from="slime_hitbox/dead_delay" to="." method="_on_dead_delay_timeout"]
 [connection signal="timeout" from="take_damage_timer" to="." method="_on_take_damage_timer_timeout"]

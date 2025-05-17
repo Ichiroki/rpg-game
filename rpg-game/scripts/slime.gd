@@ -14,6 +14,7 @@ var change_dir_interval = 2.0
 
 var is_dead = false
 var can_take_damage = true
+@onready var hitsound = $slime_hitbox/hitbox_sound
 
 func _ready():
 	randomize()
@@ -21,7 +22,8 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	deal_damage()
 	
-	if player_chase:
+	if player_chase and player != null:
+		direction = player.global_position - global_position
 		position += direction.normalized() * speed * delta
 		
 		if abs(direction.x) > abs(direction.y) :
@@ -39,7 +41,6 @@ func _physics_process(delta: float) -> void:
 		if random_timer <= 0:
 			change_direction()
 			random_timer = change_dir_interval
-		velocity = direction * speed
 		
 	move_and_collide(Vector2.ZERO, 0)
 
@@ -76,18 +77,29 @@ func _on_detection_area_body_exited(body: Node2D) -> void:
 		player = null
 		player_chase = false
 
+#	Enemy & Categorize Func
 func enemy():
+	pass
+	
+func plant():
 	pass
 
 func deal_damage():
 	if player_inattack_zone and global.player_current_attack == true:
 		if can_take_damage == true :
 			health -= 20
+			play_slash_sound()
 			$take_damage_timer.start()
 			can_take_damage = false
-			if health <= 0:
+			if health <= 0 and not is_dead:
+				is_dead = true
 				$AnimatedSprite2D.play("dead")
-				self.queue_free()
+				$slime_hitbox/dead_delay.start()
+				
+func play_slash_sound():
+	if hitsound.playing:
+		hitsound.stop()
+	hitsound.play()
 
 func _on_slime_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("player"):
@@ -100,3 +112,9 @@ func _on_slime_hitbox_body_exited(body: Node2D) -> void:
 		
 func _on_take_damage_timer_timeout() -> void:
 	can_take_damage = true
+
+func _on_hitbox_delay_timeout() -> void:
+	hitsound.stop()
+
+func _on_dead_delay_timeout() -> void:
+	self.queue_free()

@@ -1,0 +1,177 @@
+[gd_scene load_steps=9 format=3 uid="uid://c88oamn1k02c6"]
+
+[ext_resource type="Texture2D" uid="uid://c6vnjljrtvo81" path="res://assets/art/ui/tilemap_packed.png" id="1_dowka"]
+[ext_resource type="Script" uid="uid://dhgnchs6a0423" path="res://scripts/ui/player_ui.gd" id="2_jidv2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qidg2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8nqh2"]
+bg_color = Color(0.68, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvxe5"]
+bg_color = Color(0.21, 0.21, 0.21, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f1p5p"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jidv2"]
+bg_color = Color(0.356863, 0.615686, 0.952941, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qidg2"]
+bg_color = Color(4.33177e-07, 0.711754, 0.331906, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_jidv2")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = -475
+alignment = 2
+
+[node name="health_bar" type="NinePatchRect" parent="MarginContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+size_flags_stretch_ratio = 1.05
+texture = ExtResource("1_dowka")
+region_rect = Rect2(257, 1, 30, 30)
+patch_margin_left = 7
+patch_margin_top = 3
+patch_margin_right = 7
+patch_margin_bottom = 3
+
+[node name="bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar"]
+z_index = -1
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_qidg2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_8nqh2")
+value = 100.0
+show_percentage = false
+
+[node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar/bar"]
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 50.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="damage_bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar"]
+z_index = -2
+custom_minimum_size = Vector2(500, 50)
+offset_right = 4.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("StyleBoxFlat_cvxe5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_f1p5p")
+value = 100.0
+show_percentage = false
+
+[node name="health_bar_timer" type="Timer" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar"]
+
+[node name="mana_bar" type="NinePatchRect" parent="MarginContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(350, 25)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+texture = ExtResource("1_dowka")
+region_rect = Rect2(257, 1, 30, 30)
+patch_margin_left = 7
+patch_margin_top = 3
+patch_margin_right = 7
+patch_margin_bottom = 3
+
+[node name="bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/mana_bar"]
+z_index = -1
+custom_minimum_size = Vector2(350, 25)
+offset_right = 4.0
+offset_bottom = 27.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_jidv2")
+value = 100.0
+show_percentage = false
+
+[node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/mana_bar/bar"]
+offset_right = 350.0
+offset_bottom = 25.0
+theme_override_font_sizes/font_size = 14
+text = "150 / 150"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="damage_bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/mana_bar"]
+z_index = -2
+custom_minimum_size = Vector2(350, 20)
+offset_right = 350.0
+offset_bottom = 25.0
+theme_override_styles/background = SubResource("StyleBoxFlat_cvxe5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_f1p5p")
+value = 100.0
+show_percentage = false
+
+[node name="mana_bar_timer" type="Timer" parent="MarginContainer/MarginContainer/VBoxContainer/mana_bar"]
+
+[node name="stamina_bar" type="NinePatchRect" parent="MarginContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(350, 25)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+size_flags_stretch_ratio = 1.15
+texture = ExtResource("1_dowka")
+region_rect = Rect2(257, 1, 30, 30)
+patch_margin_left = 7
+patch_margin_top = 3
+patch_margin_right = 7
+patch_margin_bottom = 3
+
+[node name="bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar"]
+z_index = -1
+custom_minimum_size = Vector2(350, 25)
+offset_right = 350.0
+offset_bottom = 25.0
+theme_override_styles/background = SubResource("StyleBoxEmpty_qidg2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_qidg2")
+value = 100.0
+show_percentage = false
+
+[node name="indicator2" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar/bar"]
+offset_right = 350.0
+offset_bottom = 25.0
+theme_override_font_sizes/font_size = 14
+text = "150 / 150"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="damage_bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar"]
+z_index = -2
+custom_minimum_size = Vector2(350, 25)
+offset_right = 350.0
+offset_bottom = 25.0
+theme_override_styles/background = SubResource("StyleBoxFlat_cvxe5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_f1p5p")
+value = 100.0
+show_percentage = false
+
+[node name="stamina_bar_timer" type="Timer" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar"]
+
+[connection signal="timeout" from="MarginContainer/MarginContainer/VBoxContainer/health_bar/health_bar_timer" to="MarginContainer/MarginContainer/VBoxContainer/health_bar" method="_on_health_bar_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/MarginContainer/VBoxContainer/mana_bar/mana_bar_timer" to="." method="_on_mana_bar_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/MarginContainer/VBoxContainer/stamina_bar/stamina_bar_timer" to="." method="_on_stamina_bar_timer_timeout"]

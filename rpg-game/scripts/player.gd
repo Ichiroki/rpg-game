@@ -3,6 +3,8 @@ extends CharacterBody2D
 const speed = 100
 var curr_dir = "none"
 
+var pause_menu = null
+
 # Camera Variable
 @onready var camera = $Camera2D
 var target_offset := Vector2.ZERO
@@ -10,6 +12,7 @@ const camera_offset_value = 20
 const camera_lerp_speed = 30
 
 # Enemy Variable
+var enemy = null
 var enemy_inattack_range = false
 var enemy_attack_cooldown = true
 var health = 100
@@ -17,12 +20,27 @@ var player_alive = true
 
 # Animation Variable
 var attack_ip = false
+@onready var hitsound = $hitsound
+
+# Health Bar Variable
+var min_value = 0
+var max_value = health
+var value = health
+signal health_changed(new_health)
+
+func _ready():
+	global.player_health = health
+	$CanvasLayer/UI.init_health(health)
+	pause_menu = get_parent().get_node("PauseMenu") as CanvasLayer
+
+func _pause_game():
+	if Input.is_action_just_pressed("pause"):
+		emit_signal("pause_game")
 
 func _physics_process(delta: float) -> void:
 	player_movement(delta)
-	update_camera(delta)
 	attack()
-	#enemy_attack()
+	enemy_attack()
 	
 	if health <= 0 :
 		player_alive = false
@@ -33,7 +51,10 @@ func _physics_process(delta: float) -> void:
 func player_movement(delta):
 	var input_vector = Vector2.ZERO
 	var moving = false
-	
+
+	if Input.is_action_just_pressed("pause"):
+		emit_signal("pause_game")
+
 	if Input.is_action_pressed("walk_right"):
 		curr_dir = "right"
 		input_vector.x += 1
@@ -63,9 +84,6 @@ func player_movement(delta):
 	input_vector = input_vector.normalized()
 	velocity = input_vector * speed
 	move_and_slide()
-
-func update_camera(delta):
-	camera.offset = camera.offset.move_toward(target_offset, camera_lerp_speed * delta)
 
 func play_anim(movement) : 
 	var dir = curr_dir
@@ -105,15 +123,19 @@ func player():
 
 func _on_player_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
+		enemy = body
 		enemy_inattack_range = true
  
 func _on_player_hitbox_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy"):
+		enemy = null
 		enemy_inattack_range = false
 
 func enemy_attack():
 	if enemy_inattack_range and enemy_attack_cooldown == true:
-		health = health - 10
+		health = max(health - 10, 0)
+		global.player_health = health
+		$CanvasLayer/UI._set_health(health)
 		enemy_attack_cooldown = false
 		$attack_cooldown.start()
 
