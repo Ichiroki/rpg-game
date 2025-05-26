@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://11fbq8aq1uc5"]
+
+[ext_resource type="Texture2D" uid="uid://c6vnjljrtvo81" path="res://assets/art/ui/tilemap_packed.png" id="1_bl5iw"]
+
+[node name="EnemyUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_bl5iw")
+region_rect = Rect2(256, 0, 32, 32)
+patch_margin_left = 7
+patch_margin_right = 7
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="NinePatchRect"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+nine_patch_stretch = true
+tint_under = Color(0.32549, 1, 1, 1)
+tint_over = Color(0.8, 0.184, 0.184, 1)
+tint_progress = Color(1, 0, 0, 1)

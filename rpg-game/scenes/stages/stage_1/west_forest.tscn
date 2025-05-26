@@ -136,6 +136,7 @@ position = Vector2(114, 287)
 position = Vector2(260, 216)
 
 [node name="PauseMenu" parent="." instance=ExtResource("8_hqpla")]
+visible = false
 
 [node name="collision" type="StaticBody2D" parent="."]
 

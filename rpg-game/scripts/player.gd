@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const speed = 100
+@export var damage = 10
 var curr_dir = "none"
 
 var pause_menu = null
@@ -15,22 +16,21 @@ const camera_lerp_speed = 30
 var enemy = null
 var enemy_inattack_range = false
 var enemy_attack_cooldown = true
-var health = 100
-var player_alive = true
 
 # Animation Variable
 var attack_ip = false
 @onready var hitsound = $hitsound
 
 # Health Bar Variable
-var min_value = 0
-var max_value = health
-var value = health
+var max_health := 175
+var curr_health := max_health
+var player_alive = true
 signal health_changed(new_health)
 
 func _ready():
-	global.player_health = health
-	$CanvasLayer/UI.init_health(health)
+	global.player_health = curr_health
+	global.player_max_health = max_health
+	$CanvasLayer/UI.init_health(curr_health, max_health)
 	pause_menu = get_parent().get_node("PauseMenu") as CanvasLayer
 
 func _pause_game():
@@ -40,12 +40,9 @@ func _pause_game():
 func _physics_process(delta: float) -> void:
 	player_movement(delta)
 	attack()
-	enemy_attack()
 	
-	if health <= 0 :
+	if curr_health <= 0 :
 		player_alive = false
-		health = 0
-		print("player have been killed")
 		self.queue_free()
 
 func player_movement(delta):
@@ -125,19 +122,20 @@ func _on_player_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = body
 		enemy_inattack_range = true
+		enemy_attack(enemy.damage)
  
 func _on_player_hitbox_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = null
 		enemy_inattack_range = false
 
-func enemy_attack():
+func enemy_attack(amount: int):
 	if enemy_inattack_range and enemy_attack_cooldown == true:
-		health = max(health - 10, 0)
-		global.player_health = health
-		$CanvasLayer/UI._set_health(health)
-		enemy_attack_cooldown = false
-		$attack_cooldown.start()
+		curr_health = max(curr_health - amount, 0)
+		print(curr_health)
+		global.player_health = curr_health
+		if curr_health <= 0:
+			self.queue_free()
 
 func _on_attack_cooldown_timeout() -> void:
 	enemy_attack_cooldown = true

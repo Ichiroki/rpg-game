@@ -66,8 +66,7 @@ offset_right = 4.0
 offset_bottom = 27.0
 theme_override_styles/background = SubResource("StyleBoxEmpty_qidg2")
 theme_override_styles/fill = SubResource("StyleBoxFlat_8nqh2")
-max_value = 150.0
-value = 150.0
+value = 100.0
 show_percentage = false
 
 [node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar/bar"]

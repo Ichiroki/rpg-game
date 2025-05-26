@@ -4,7 +4,8 @@ extends Node
 var player_current_attack = false
 
 # Player UI Variabel
-var player_health
+var player_health: int
+var player_max_health: int
 
 # Scene Variabel
 var transition_scene = false

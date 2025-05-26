@@ -17,6 +17,7 @@ extends Control
 @onready var stamina_bar = $MarginContainer/MarginContainer/VBoxContainer/stamina_bar/bar
 
 var health = 0 : set = _set_health
+var max_health = 0
 var mana = 0 : set = _set_mana
 var stamina = 0 : set = _set_stamina
 
@@ -25,8 +26,8 @@ func _set_health(new_health):
 	health = min(health_bar.max_value, new_health)
 	
 	health_bar.value = health
-	
-	health_indicator.text = str(health, " / ", global.player_health)
+	global.player_health = health
+	update_health_bar(health, max_health)
 	
 	if health <= 0:
 		queue_free()
@@ -36,12 +37,17 @@ func _set_health(new_health):
 	else:
 		damage_health_bar.value = health
 
-func init_health(_health):
+func init_health(_health, _max_health):
 	health = _health
-	health_bar.max_value = health
+	max_health = _max_health
+	health_bar.max_value = max_health
 	health_bar.value = health
-	damage_health_bar.max_value = health
+	damage_health_bar.max_value = max_health
 	damage_health_bar.value = health
+	update_health_bar(health, max_health)
+	
+func update_health_bar(_health, _max_health):
+	health_indicator.text = str(health, " / ", max_health)
 	
 func _set_mana(new_mana):
 	var prev_mana = mana

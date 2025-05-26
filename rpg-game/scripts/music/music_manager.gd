@@ -11,7 +11,6 @@ var time_memory = {
 func play_music(stream: AudioStream):
 	stream_player.stream = stream
 	stream_player.play(current_time)
-	print(current_time)
 	
 func save_current_time():
 	current_time = stream_player.get_playback_position()
