@@ -9,7 +9,8 @@ var player = null
 var player_inattack_zone = false
 
 #	Health Variable
-var health = 30
+var max_health = 30
+var health = max_health
 
 #	Speed Variable
 var chase_speed = 40
@@ -26,7 +27,7 @@ var can_take_damage = true
 
 var knockback_vector: Vector2 = Vector2.ZERO
 var knockback_timer: float = 0.0
-const knockback_duration := 0.0001
+const knockback_duration := 0.2
 const knockback_force := 200
 
 func _ready():
@@ -45,7 +46,6 @@ func _physics_process(delta: float) -> void:
 		else :
 			knockback_timer -= delta
 		velocity = knockback_vector
-		knockback_timer -= delta
 	else:
 		if player_chase and player != null:
 			direction = player.global_position - global_position
@@ -117,7 +117,8 @@ func enemy():
 func plant():
 	pass
 
-func apply_damage(amount: int):
+func received_damage(amount: int):
+	print(amount)
 	if player_inattack_zone and global.player_current_attack == true:
 		if can_take_damage == true :
 			health -= amount
@@ -128,7 +129,6 @@ func apply_damage(amount: int):
 				knockback_timer = knockback_duration
 				
 			play_slash_sound()
-			print(health)
 			$take_damage_timer.start()
 			can_take_damage = false
 			
@@ -136,6 +136,15 @@ func apply_damage(amount: int):
 				is_dead = true
 				$AnimatedSprite2D.play("dead")
 				$slime_hitbox/dead_delay.start()
+				
+func update_health():
+	var healthbar = $health_bar
+	healthbar.value = health
+
+	if health >= max_health:
+		healthbar.visible = false
+	else:
+		healthbar.visible = true
 				
 func play_slash_sound():
 	if hitsound.playing:
@@ -145,7 +154,7 @@ func play_slash_sound():
 func _on_slime_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("player"):
 		player_inattack_zone = true
-		apply_damage(player.damage)
+		received_damage(player.damage)
 
 func _on_slime_hitbox_body_exited(body: Node2D) -> void:
 	if body.has_method("player"):
