@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://c88oamn1k02c6"]
+[gd_scene load_steps=10 format=3 uid="uid://c88oamn1k02c6"]
 
 [ext_resource type="Texture2D" uid="uid://c6vnjljrtvo81" path="res://assets/art/ui/tilemap_packed.png" id="1_dowka"]
 [ext_resource type="Script" uid="uid://dhgnchs6a0423" path="res://scripts/ui/player_ui.gd" id="2_jidv2"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qidg2"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8nqh2"]
-bg_color = Color(0.68, 0, 0, 1)
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ggrl5"]
+bg_color = Color(0.794399, 2.26215e-06, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvxe5"]
 bg_color = Color(0.21, 0.21, 0.21, 1)
@@ -16,6 +17,8 @@ bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jidv2"]
 bg_color = Color(0.356863, 0.615686, 0.952941, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qidg2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qidg2"]
 bg_color = Color(4.33177e-07, 0.711754, 0.331906, 1)
@@ -64,10 +67,9 @@ custom_minimum_size = Vector2(500, 50)
 layout_mode = 0
 offset_right = 4.0
 offset_bottom = 27.0
-theme_override_styles/background = SubResource("StyleBoxEmpty_qidg2")
-theme_override_styles/fill = SubResource("StyleBoxFlat_8nqh2")
-max_value = 150.0
-value = 150.0
+theme_override_styles/background = SubResource("StyleBoxFlat_8nqh2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ggrl5")
+rounded = true
 show_percentage = false
 
 [node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar/bar"]
@@ -78,6 +80,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="damage_bar" type="ProgressBar" parent="MarginContainer/MarginContainer/VBoxContainer/health_bar"]
+visible = false
 z_index = -2
 custom_minimum_size = Vector2(500, 50)
 layout_mode = 0
@@ -110,6 +113,7 @@ offset_right = 4.0
 offset_bottom = 27.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_jidv2")
 value = 100.0
+rounded = true
 show_percentage = false
 
 [node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/mana_bar/bar"]
@@ -158,7 +162,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_qidg2")
 value = 100.0
 show_percentage = false
 
-[node name="indicator2" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar/bar"]
+[node name="indicator" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/stamina_bar/bar"]
 layout_mode = 0
 offset_right = 350.0
 offset_bottom = 25.0

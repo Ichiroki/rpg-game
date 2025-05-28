@@ -26,15 +26,33 @@ var attack_ip = false
 @onready var hitsound = $hitsound
 
 # Health Bar Variable
-var max_health := 175
-var curr_health := max_health
+var max_health := 175.0
+var curr_health = max_health
 var player_alive = true
-signal health_changed(new_health)
+
+signal health_changed(curr_health: float, max_health: float)
+
+# Mana Bar Variable
+var max_mana := 123
+var curr_mana := max_mana
+
+signal mana_changed(curr_mana: float, max_mana: float)
+
+# Stamina Bar Variable
+var max_stamina := 147
+var curr_stamina := max_stamina
+
+signal stamina_changed(curr_stamina: float, max_stamina: float)
 
 func _ready():
-	global.player_health = curr_health
-	global.player_max_health = max_health
-	$CanvasLayer/UI.init_health(curr_health, max_health)
+	var ui = $CanvasLayer/UI
+	connect("health_changed", Callable(ui, "_on_health_changed"))
+	connect("mana_changed", Callable(ui, "_on_mana_changed"))
+	connect("stamina_changed", Callable(ui, "_on_stamina_changed"))
+	
+	emit_signal("health_changed", curr_health, max_health)
+	emit_signal("mana_changed", curr_mana, max_mana)
+	emit_signal("stamina_changed", curr_stamina, max_stamina)
 	pause_menu = get_parent().get_node("PauseMenu") as CanvasLayer
 
 func _process(delta: float) -> void:
@@ -78,9 +96,7 @@ func player_movement(delta):
 	input_vector = input_vector.normalized()
 	velocity = input_vector * speed
 	move_and_slide()
-	
-	print("Current animation : ", anim.animation)
-	
+
 	if attack_ip:
 		return
 	
@@ -137,18 +153,19 @@ func _on_player_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = body
 		enemy_inattack_range = true
-		enemy_attack(enemy.damage)
+		received_damage(enemy.damage)
  
 func _on_player_hitbox_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = null
 		enemy_inattack_range = false
-
-func enemy_attack(amount: int):
+		
+func received_damage(amount: int):
 	if enemy_inattack_range and enemy_attack_cooldown == true:
-		curr_health = max(curr_health - amount, 0)
-		print(curr_health)
-		global.player_health = curr_health
+		curr_health -= amount
+		curr_health = clamp(curr_health, 0, max_health)
+		emit_signal("health_changed", curr_health, max_health)
+		
 		if curr_health <= 0:
 			self.queue_free()
 
@@ -179,11 +196,7 @@ func _on_deal_attack_timer_timeout() -> void:
 	global.player_current_attack = false
 	attack_ip = false
 
-
 func _on_hit_area_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = body
 		body.received_damage(damage)
-
-func _on_hit_area_body_exited(body: Node2D) -> void:
-	pass # Replace with function body.

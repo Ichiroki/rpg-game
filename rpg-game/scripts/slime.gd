@@ -118,7 +118,6 @@ func plant():
 	pass
 
 func received_damage(amount: int):
-	print(amount)
 	if player_inattack_zone and global.player_current_attack == true:
 		if can_take_damage == true :
 			health -= amount
@@ -168,3 +167,12 @@ func _on_hitbox_delay_timeout() -> void:
 
 func _on_dead_delay_timeout() -> void:
 	self.queue_free()
+
+func _on_attack_zone_body_entered(body: Node2D) -> void:
+	if body.has_method("player"):
+		player = body
+		body.received_damage(damage)
+
+func _on_attack_zone_body_exited(body: Node2D) -> void:
+	if body.has_method("player"):
+		player = null

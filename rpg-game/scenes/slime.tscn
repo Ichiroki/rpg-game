@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://d3wyoxcsahhot"]
+[gd_scene load_steps=53 format=3 uid="uid://d3wyoxcsahhot"]
 
 [ext_resource type="Texture2D" uid="uid://3l2cw13rth12" path="res://assets/art/characters/slime.png" id="1_371uh"]
 [ext_resource type="Script" uid="uid://crnt2u5bcon6g" path="res://scripts/slime.gd" id="1_p2gj0"]
@@ -385,6 +385,9 @@ radius = 69.0072
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p2gj0"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_pjw23"]
+radius = 15.0333
+
 [node name="Slime" type="CharacterBody2D" groups=["enemy", "plant"]]
 script = ExtResource("1_p2gj0")
 
@@ -427,6 +430,12 @@ offset_bottom = 45.0
 scale = Vector2(0.1, 0.1)
 show_percentage = false
 
+[node name="attack_zone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack_zone"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_pjw23")
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
@@ -434,3 +443,5 @@ show_percentage = false
 [connection signal="body_exited" from="slime_hitbox" to="." method="_on_slime_hitbox_body_exited"]
 [connection signal="timeout" from="slime_hitbox/dead_delay" to="." method="_on_dead_delay_timeout"]
 [connection signal="timeout" from="take_damage_timer" to="." method="_on_take_damage_timer_timeout"]
+[connection signal="body_entered" from="attack_zone" to="." method="_on_attack_zone_body_entered"]
+[connection signal="body_exited" from="attack_zone" to="." method="_on_attack_zone_body_exited"]
