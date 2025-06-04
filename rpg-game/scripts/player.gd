@@ -4,11 +4,10 @@ const speed = 100
 @export var damage = 10
 var curr_dir = "none"
 
-var pause_menu = null
-
 # Miscellaneous Variable
 @onready var hit_area = $hit_area
 @onready var anim = $AnimatedSprite2D
+@onready var pause_menu = $PauseMenu
 
 # Camera Variable
 @onready var camera = $Camera2D
@@ -44,6 +43,15 @@ var curr_stamina := max_stamina
 
 signal stamina_changed(curr_stamina: float, max_stamina: float)
 
+func _input(event):
+	if event.is_action_pressed("pause"):
+		if not get_tree().paused:
+			get_tree().paused = true
+			pause_menu.show()
+		else:
+			get_tree().paused = false
+			pause_menu.hide()
+
 func _ready():
 	var ui = $CanvasLayer/UI
 	connect("health_changed", Callable(ui, "_on_health_changed"))
@@ -53,7 +61,6 @@ func _ready():
 	emit_signal("health_changed", curr_health, max_health)
 	emit_signal("mana_changed", curr_mana, max_mana)
 	emit_signal("stamina_changed", curr_stamina, max_stamina)
-	pause_menu = get_parent().get_node("PauseMenu") as CanvasLayer
 
 func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
@@ -80,9 +87,6 @@ func _physics_process(delta: float) -> void:
 
 func player_movement(delta):
 	var input_vector = Vector2.ZERO
-	
-	if Input.is_action_just_pressed("pause"):
-		emit_signal("pause_game")
 
 	if Input.is_action_pressed("walk_right"):
 		input_vector.x += 1
@@ -153,12 +157,14 @@ func _on_player_hitbox_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = body
 		enemy_inattack_range = true
+		$attack_cooldown.start()
 		received_damage(enemy.damage)
  
 func _on_player_hitbox_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy"):
 		enemy = null
 		enemy_inattack_range = false
+		$attack_cooldown.stop()
 		
 func received_damage(amount: int):
 	if enemy_inattack_range and enemy_attack_cooldown == true:

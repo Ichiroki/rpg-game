@@ -1,9 +1,10 @@
-[gd_scene load_steps=60 format=3 uid="uid://8e13m6ekji1h"]
+[gd_scene load_steps=61 format=3 uid="uid://8e13m6ekji1h"]
 
 [ext_resource type="Texture2D" uid="uid://dheylvnq04kps" path="res://assets/art/characters/player.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cijthl4n7fvot" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="AudioStream" uid="uid://xmwbsxietdor" path="res://assets/audio/slash_plant.mp3" id="4_dqkch"]
 [ext_resource type="PackedScene" uid="uid://c88oamn1k02c6" path="res://scenes/utils/ui/ui.tscn" id="4_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://s1imew4h4jg4" path="res://scenes/utils/ui/pause_menu.tscn" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -416,7 +417,6 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
-radius = 6.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
 size = Vector2(32, 16.125)
@@ -460,9 +460,11 @@ stream = ExtResource("4_dqkch")
 position = Vector2(2, 0.9375)
 shape = SubResource("RectangleShape2D_dqkch")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_dqkch")
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_qlg0r")]
 
 [connection signal="body_entered" from="player_hitbox" to="." method="_on_player_hitbox_body_entered"]
 [connection signal="body_exited" from="player_hitbox" to="." method="_on_player_hitbox_body_exited"]
